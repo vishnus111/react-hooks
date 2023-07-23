@@ -1,34 +1,37 @@
-import {  useReducer} from 'react'
+import {  useState,useEffect} from 'react'
 import './App.css'
+import axios from 'axios';
 
 function App() {
+  const [data, setData] = useState("");
+  const [count, setCount] = useState(0);
 
-    const reducer = (state, action) => {
-        switch (action.type) {
-          case "INCREMENT":
-            return { count: state.count + 1, showText: state.showText };
-          case "toggleShowText":
-            return { count: state.count, showText: !state.showText };
-          default:
-            return state;
-        }
-      };
-      const [state, dispatch] = useReducer(reducer, { count: 0, showText: true });
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/comments")
+      .then((response) => {
+        setData(response.data[0].email);
+        console.log("API WAS CALLED");
+      });
+  }, []);
+
   return (
     <>
       <div>
-      <h1>{state.count}</h1>
+      Hello World
+      <h1>{data}</h1>
+      <h1>{count}</h1>
       <button
         onClick={() => {
-          dispatch({ type: "INCREMENT" });
-          dispatch({ type: "toggleShowText" });
+          setCount(count + 1);
         }}
       >
-        Click Here
+        Click
       </button>
-
-      {state.showText && <p>This is a text</p>}
     </div>
+  
+
+
   
     </>
   )
